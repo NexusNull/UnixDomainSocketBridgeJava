@@ -29,7 +29,7 @@ public class UnixSocket extends Thread {
             if(bytesRead == -1) {
                 try {
                     this.close();
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -45,8 +45,9 @@ public class UnixSocket extends Thread {
         channel.write(ByteBuffer.wrap(msg.getBytes(StandardCharsets.UTF_8)));
     }
 
-    public synchronized void close() throws IOException {
+    public synchronized void close() throws IOException, InterruptedException {
         channel.close();
+        this.join();
     }
 
 }
