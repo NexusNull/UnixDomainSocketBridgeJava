@@ -1,3 +1,5 @@
+package de.rub.nds;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -30,7 +32,6 @@ public class InstanceManager extends Thread {
 
     public synchronized void startInstance() throws IOException {
         Process p = Runtime.getRuntime().exec(this.path+" /tmp/asd");
-        System.out.println("Bla");
         processes.add(p);
     }
 }

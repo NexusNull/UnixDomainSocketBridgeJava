@@ -1,3 +1,5 @@
+package de.rub.nds;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
@@ -55,6 +57,9 @@ public class UnixSocketServer extends Thread {
     }
 
     public synchronized UnixSocket getSocket(int i) {
-        return this.sockets.get(i);
+        if (i < this.sockets.size()) {
+            return this.sockets.get(i);
+        }
+        return null;
     }
 }

@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="UnixDomainSocketBridgeJava" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="browser-link" target="16" />
+      <module name="UnixDomainSocketBridgeJava" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

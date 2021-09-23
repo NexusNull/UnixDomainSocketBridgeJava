@@ -1,3 +1,5 @@
+package de.rub.nds;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -6,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 
 public class UnixSocket extends Thread {
     SocketChannel channel;
+    String message;
+    boolean ready;
 
     public UnixSocket(SocketChannel channel) {
         this.channel = channel;
@@ -26,7 +30,7 @@ public class UnixSocket extends Thread {
                 System.exit(0);
             }
 
-            if(bytesRead == -1) {
+            if (bytesRead == -1) {
                 try {
                     this.close();
                 } catch (IOException | InterruptedException e) {
@@ -34,15 +38,31 @@ public class UnixSocket extends Thread {
                 }
             }
 
-            byte[] bytes = new byte[bytesRead];
-            buffer.flip();
-            buffer.get(bytes);
-            System.out.println(new String(bytes));
+            this.receive(buffer, bytesRead);
         }
     }
 
-    public synchronized void send(String msg) throws IOException {
+    private synchronized void receive(ByteBuffer buffer, int bytesRead) {
+        byte[] bytes = new byte[bytesRead];
+        buffer.flip();
+        buffer.get(bytes);
+        message = new String(bytes);
+        ready = true;
+        this.notify();
+    }
+
+    public synchronized String send(String msg) throws IOException {
+        System.out.println(msg);
+        ready = false;
         channel.write(ByteBuffer.wrap(msg.getBytes(StandardCharsets.UTF_8)));
+        while (!ready) {
+            try {
+                this.wait();
+            } catch (InterruptedException ignored) {
+            }
+        }
+
+        return message;
     }
 
     public synchronized void close() throws IOException, InterruptedException {
