@@ -16,12 +16,11 @@ public class HTMLTokenizer<I, D> implements MembershipOracle.MealyMembershipOrac
 
     @Override
     public void processQueries(Collection<? extends Query<I, Word<D>>> queries) {
-        //block until all queries have completed
-        //send queries over to chromium components
-        //answer queries
         for (Query<I, Word<D>> query : queries) {
             try {
-                this.socket.send(query.getInput().toString());
+                String result = this.socket.send(query.getInput().toString());
+                System.out.println(result);
+                query.answer((Word<D>) Word.fromString(result));
             } catch (IOException e) {
                 e.printStackTrace();
             }

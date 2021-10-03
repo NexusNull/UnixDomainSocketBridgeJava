@@ -31,7 +31,14 @@ public class InstanceManager extends Thread {
     }
 
     public synchronized void startInstance() throws IOException {
-        Process p = Runtime.getRuntime().exec(this.path+" /tmp/asd");
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(this.path);
+        params.add("/tmp/asd");
+
+        ProcessBuilder pb = new ProcessBuilder(params);
+        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+        pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+        Process p = pb.start();
         processes.add(p);
     }
 }
