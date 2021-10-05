@@ -20,15 +20,17 @@ public class Main {
             socket = server.getSocket(0);
             Thread.sleep(100);
         }
-        HTMLTokenizer tokenizer = new HTMLTokenizer<Character, Word<Character>>(socket);
-        ArrayList<String> chars = new ArrayList<>();
-        chars.add("<");
-        chars.add(">");
-        chars.add("\"");
-        chars.add("=");
-        chars.add("/");
-        chars.add("div");
-        Alphabet<String> alph = new ListAlphabet<>(chars);
+        HTMLTokenizer tokenizer = new HTMLTokenizer<String, Word<Character>>(socket);
+        ArrayList<String> tokens = new ArrayList<>();
+
+        tokens.add(">");
+        tokens.add("\"");
+        tokens.add("=");
+        tokens.add("/");
+        tokens.add("div");
+        tokens.add("<!DOCTYPE>");
+        tokens.add("html");
+        Alphabet<String> alph = new ListAlphabet<>(tokens);
         MealyDHC adtLearner = new MealyDHC<String, Word<Character>>(alph, tokenizer);
         adtLearner.startLearning();
 

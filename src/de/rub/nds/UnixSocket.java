@@ -52,9 +52,13 @@ public class UnixSocket extends Thread {
     }
 
     public synchronized String send(String msg) throws IOException {
-        System.out.println(msg);
         ready = false;
-        channel.write(ByteBuffer.wrap(msg.getBytes(StandardCharsets.UTF_8)));
+        byte[] bytearr = msg.getBytes(StandardCharsets.UTF_8);
+        ByteBuffer buffer = ByteBuffer.allocate(bytearr.length+1);
+        buffer.put(bytearr);
+        buffer.put((byte) 0);
+        buffer.flip();
+        channel.write(buffer);
         while (!ready) {
             try {
                 this.wait();
